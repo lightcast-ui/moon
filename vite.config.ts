@@ -24,7 +24,6 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
       name: "Moon",
-      fileName: (format) => `moon.${format}.js`,
       formats: ["es", "cjs"],
     },
     rollupOptions: {
@@ -39,6 +38,7 @@ export default defineConfig({
         },
         preserveModules: true,
         preserveModulesRoot: "src",
+        entryFileNames: "[name].js",
       },
     },
   },
