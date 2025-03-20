@@ -1,6 +1,6 @@
 {
-  "name": "moon",
-  "private": true,
+  "name": "@lightcast-ui/moon",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
