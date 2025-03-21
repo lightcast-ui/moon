@@ -39,32 +39,27 @@ function discoverComponentExports(componentsRoot) {
       )
       .forEach((entry) => {
         const componentName = entry.name.replace(".tsx", "");
-        const relativePath = path
-          .join(basePath, componentName)
-          .replace(/\\/g, "/");
+        // Remove "ui/" from the path - using only the component name
+        const exportPath = componentName;
         const distPath = path
           .join("components", basePath, componentName)
           .replace(/\\/g, "/");
 
-        exports[`./${relativePath}`] = {
+        exports[`./${exportPath}`] = {
           types: `./dist/${distPath}.d.ts`,
           import: `./dist/${distPath}.js`,
           require: `./dist/${distPath}.cjs`,
         };
       });
 
-    // Process subdirectories
-    entries
-      .filter((entry) => entry.isDirectory())
-      .forEach((entry) => {
-        const subdirPath = path.join(dirPath, entry.name);
-        const newBasePath = path.join(basePath, entry.name);
-        processComponentDirectory(subdirPath, newBasePath);
-      });
+    // We're not processing subdirectories for the flattened structure
   }
 
-  // Start processing from components root
-  processComponentDirectory(componentsRoot);
+  // Start processing only the UI components directory
+  const uiComponentsDir = path.join(componentsRoot, "ui");
+  if (fs.existsSync(uiComponentsDir)) {
+    processComponentDirectory(uiComponentsDir, "ui");
+  }
 
   return exports;
 }
