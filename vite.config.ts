@@ -13,7 +13,10 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    dts({ insertTypesEntry: true, include: ["src/**/*.{ts,tsx}"] }),
+    dts({
+      tsconfigPath: resolve(__dirname, "tsconfig.app.json"),
+      rollupTypes: false,
+    }),
   ],
   resolve: {
     alias: {
@@ -25,6 +28,8 @@ export default defineConfig({
       entry: resolve(__dirname, "src/index.ts"),
       name: "Moon",
       formats: ["es", "cjs"],
+      fileName: (format, entryName) =>
+        `${entryName}.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       // Dependencies that shouldn't be bundled into the library
@@ -42,7 +47,6 @@ export default defineConfig({
         },
         preserveModules: true,
         preserveModulesRoot: "src",
-        entryFileNames: "[name].js",
       },
     },
   },
