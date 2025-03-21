@@ -1,13 +1,20 @@
 import { defineConfig } from "vite";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { dependencies, peerDependencies } from "./package.json";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import dts from "vite-plugin-dts";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), dts({ rollupTypes: true })],
+  plugins: [
+    react(),
+    tailwindcss(),
+    dts({ insertTypesEntry: true, include: ["src/**/*.{ts,tsx}"] }),
+  ],
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
@@ -33,6 +40,9 @@ export default defineConfig({
           react: "React",
           "react-dom": "ReactDOM",
         },
+        preserveModules: true,
+        preserveModulesRoot: "src",
+        entryFileNames: "[name].js",
       },
     },
   },
